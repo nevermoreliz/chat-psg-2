@@ -10,7 +10,11 @@ const getPersona = async (req, res) => {
         const query = 'select * from personas'
         const result = await adapterDB.db.query(query);
         const row = result.rows[0];
-        res.send({ row })
+
+        const user = req.usuario
+        res.send({ row, user })
+
+        // res.send({ row})
 
     } catch (error) {
 
@@ -28,12 +32,12 @@ const createPersona = async (req, res) => {
 
     try {
 
-        
+
 
         const body = matchedData(req);
 
         const query = `INSERT INTO personas(nombre, paterno, materno, ci, fecha_nacimiento, correo_electronico, sexo, estado, created_at, updated_at) VALUES($1, $2, $3, $4, $5, $6, $7, true, now(), now()) RETURNING *`;
-        
+
         const values = [body.nombre, body.paterno, body.materno, body.ci, body.fecha_nacimiento, body.correo_electronico, body.sexo];
 
         const result = await adapterDB.db.query(query, values)
